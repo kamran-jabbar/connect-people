@@ -1,0 +1,44 @@
+#map-area {
+    height: 267px;
+    width: 298px;
+}
+
+#create-meeting-submit-icon {
+    margin: 0 auto;
+    display: block;
+}
+
+#create-meeting-error-li {
+    list-style-type: none
+}
+
+.icon-custom-style {
+    padding-right: 10px;
+}
+
+.meeting-modal-row {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.meeting-modal-heading {
+    font-size: 20px;
+}
+
+.create-meeting {
+    float: right;
+}
+
+.meeting-table-heading {
+    font-size: 13px;
+}
+
+.meeting-table-row {
+    cursor: pointer;
+    color: blue;
+    font-size: 13px;
+}
+
+#create-meeting-icon {
+    color: #6f6f6f;
+}

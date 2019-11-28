@@ -78,8 +78,8 @@
     @endif
 
     <div class="content">
-        <div class="title m-b-md">
-            Task Management System
+        <div class="title">
+            Connect People
         </div>
     </div>
 </div>

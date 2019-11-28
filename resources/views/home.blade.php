@@ -1,37 +1,88 @@
 @extends('layouts.app')
-
 @section('content')
+    @push('head')
+    <script src="http://maps.google.com/maps/api/js?libraries=places&key=AIzaSyBE3ApJmvci0C2rTN1A6en5vj2Uuo3R6LA"></script>
+    <script src="{{ asset('js/custom-js.js') }}"></script>
+    <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">
+    @endpush
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                Welcome! You are logged in, you can
-                <a href="{{ url('create-task') }}" class="btn btn-info">Create Task</a>
-                <br>
-                <p><b>Total time spent(minutes):</b> {{ round($minutes,2) }}</p>
+                <p>Welcome! You are logged in</p>
                 @if (\Session::has('status'))
                     <div class="alert alert-{!! \Session::get('status') !!}">
-                        <ul style="list-style-type: none">
+                        <ul  id="create-meeting-error-li">
                             <li>{!! \Session::get('message') !!}</li>
                         </ul>
                     </div>
-                @endif
+            @endif
+            <!-- Modal -->
+                <div class="modal fade" id="meeting-popup" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Meeting Name</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr class="meeting-modal-heading">
+                                        <th scope="col">Meeting Time</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    <tr class="meeting-modal-row meeting-row">
+                                        <td>Science Park</td>
+                                        <td>
+                                            <span class="glyphicon glyphicon-edit icon-custom-style"></span>
+                                           {{-- <span class="glyphicon glyphicon-map-marker icon-custom-style"></span>--}}
+                                            <span class="glyphicon glyphicon-trash icon-custom-style"></span>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div id="map-area"></div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tasks</div>
+                    <div class="panel-heading">
+                        Meetings
+                        <a href="{{ url('create-task') }}" id="create-meeting-icon">
+                            <span class="glyphicon glyphicon-plus-sign create-meeting"></span>
+                        </a>
+                    </div>
                     <div class="panel-body">
                         <table class="table">
                             <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Start Time</th>
-                                <th scope="col">End Time</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Time Spent(Y-m-d H:m:s)</th>
-                                <th scope="col">Action</th>
+                            <tr class="meeting-table-heading">
+                                <th scope="col">Type</th>
+                                <th scope="col">Location</th>
                             </tr>
                             </thead>
                             <tbody>
+
+                            <tr class="meeting-table-row">
+                                <td>Business Meeting</td>
+                                <td>Science Park</td>
+                            </tr>
+                            <tr class="meeting-table-row">
+                                <td>Business Meeting</td>
+                                <td>Science Park</td>
+                            </tr>
+                            <tr class="meeting-table-row">
+                                <td>Business Meeting</td>
+                                <td>Science Park</td>
+                            </tr>
                             @if(count($tasks) > 0)
                                 @foreach($tasks as $task)
                                     <tr>
@@ -75,11 +126,11 @@
                                     </tr>
                                 @endforeach
                             @else
-                                <tr>
+                                {{--<tr>
                                     <td colspan="7" align="center">
                                         No task found.
                                     </td>
-                                </tr>
+                                </tr>--}}
                             @endif
                             </tbody>
                         </table>
