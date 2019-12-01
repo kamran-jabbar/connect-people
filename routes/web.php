@@ -18,8 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 /* @todo: there can create group for this task related stuff. */
 Route::get('/dashboard', 'HomeController@index')->name('home');
-Route::get('/create-task', 'TaskController@createForm');
-Route::post('/create-task', 'TaskController@store');
-Route::get('/delete-task/{id}', 'TaskController@delete');
-Route::get('/start-task/{id}', 'TaskController@start');
-Route::get('/finish-task/{id}', 'TaskController@finish');
+Route::get('/create-meeting', 'MeetingController@createMeetingForm');
+Route::post('/create-meeting', 'MeetingController@storeMeeting');
+Route::get('/edit-meeting/{id}', 'MeetingController@editMeeting');
+Route::get('/delete-meeting/{id}', 'MeetingController@deleteMeeting');
+Route::get('/start-task/{id}', 'MeetingController@start');
+Route::get('/finish-task/{id}', 'MeetingController@finish');

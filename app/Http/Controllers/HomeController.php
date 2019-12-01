@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Meeting;
 use App\Task;
 
 /**
@@ -12,29 +13,28 @@ class HomeController extends Controller
 {
     /**
      * The task model implementation.
-     * @var Task
+     * @var Meeting
      */
-    private $task;
+    private $meeting;
 
     /**
      * HomeController constructor.
-     * @param Task $task
+     * @param Meeting $meeting
      */
-    public function __construct(Task $task)
+    public function __construct(Meeting $meeting)
     {
         $this->middleware('auth');
-        $this->task = $task;
+        $this->meeting = $meeting;
     }
 
     /**
-     * Show the application dashboard with tasks list.
+     * Show the application dashboard with meeting list.
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         return view('home', [
-                'tasks' => $this->task->getListByUser(),
-                'minutes' => $this->task->getTimeSpentInSeconds()
+                'meetings' => $this->meeting->getMeetingList(),
             ]
         );
     }

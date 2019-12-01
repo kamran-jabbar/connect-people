@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTasksTable extends Migration
+class Meeting extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,18 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('meeting', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('name');
-            $table->text('description');
-            $table->dateTime('start_time')->nullable();
-            $table->dateTime('end_time')->nullable();
+            $table->integer('meeting_type_id')->unsigned();
+            $table->text('latitude');
+            $table->text('longitude');
+            $table->text('location');
+            $table->text('time');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+            $table->foreign('meeting_type_id')->references('id')->on('meeting_type')
                 ->onDelete('cascade');
         });
     }
@@ -33,6 +36,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('meeting');
     }
 }

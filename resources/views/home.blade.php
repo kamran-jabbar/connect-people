@@ -11,7 +11,7 @@
                 <p>Welcome! You are logged in</p>
                 @if (\Session::has('status'))
                     <div class="alert alert-{!! \Session::get('status') !!}">
-                        <ul  id="create-meeting-error-li">
+                        <ul id="create-meeting-error-li">
                             <li>{!! \Session::get('message') !!}</li>
                         </ul>
                     </div>
@@ -22,10 +22,10 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Meeting Name</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                                <h2 class="modal-title" id="exampleModalLabel"></h2>
                             </div>
                             <div class="modal-body">
                                 <table class="table">
@@ -35,11 +35,14 @@
                                         <th scope="col">Action</th>
                                     </tr>
                                     <tr class="meeting-modal-row meeting-row">
-                                        <td>Science Park</td>
+                                        <td class="meeting-time">Science Park</td>
                                         <td>
-                                            <span class="glyphicon glyphicon-edit icon-custom-style"></span>
-                                           {{-- <span class="glyphicon glyphicon-map-marker icon-custom-style"></span>--}}
-                                            <span class="glyphicon glyphicon-trash icon-custom-style"></span>
+                                            <a class="edit-meeting" href="">
+                                                <span class="glyphicon glyphicon-edit icon-custom-style"></span>
+                                            </a>
+                                            <a class="delete-meeting" href=""  onclick="return confirm('Are you sure to delete this meeting?')">
+                                                <span class="glyphicon glyphicon-trash icon-custom-style"></span>
+                                            </a>
                                         </td>
                                     </tr>
                                     </thead>
@@ -57,7 +60,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Meetings
-                        <a href="{{ url('create-task') }}" id="create-meeting-icon">
+                        <a href="{{ url('create-meeting') }}" id="create-meeting-icon">
                             <span class="glyphicon glyphicon-plus-sign create-meeting"></span>
                         </a>
                     </div>
@@ -70,71 +73,26 @@
                             </tr>
                             </thead>
                             <tbody>
-
-                            <tr class="meeting-table-row">
-                                <td>Business Meeting</td>
-                                <td>Science Park</td>
-                            </tr>
-                            <tr class="meeting-table-row">
-                                <td>Business Meeting</td>
-                                <td>Science Park</td>
-                            </tr>
-                            <tr class="meeting-table-row">
-                                <td>Business Meeting</td>
-                                <td>Science Park</td>
-                            </tr>
-                            @if(count($tasks) > 0)
-                                @foreach($tasks as $task)
-                                    <tr>
-                                        <th scope="row">{{ $task['id'] }}</th>
-                                        <td>{{ $task['name'] }}</td>
-                                        <td>{{ $task['description'] }}</td>
-                                        <td>{{ $task['start_time'] }}</td>
-                                        <td>{{ $task['end_time'] }}</td>
-                                        <td>@if($task['start_time'] && $task['end_time'])
-                                                Completed
-                                            @elseif($task['start_time'])
-                                                In progress
-                                            @else
-                                                Not started
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{--@todo: Conditions are too odd so that should get data from query in controller .--}}
-                                            @if($task['start_time'] && $task['end_time'])
-                                                {{
-                                                    (new \Carbon\Carbon($task['start_time']))
-                                                    ->diff(new \Carbon\Carbon($task['end_time']))
-                                                    ->format('%Y-%m-%d %H:%i:%s')
-                                                }}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{--@todo: Conditions are too odd so that should get data from query.--}}
-                                            @if($task['start_time'] && $task['end_time'] === null)
-                                                <a href="{{ url('finish-task') . '/' . $task['id'] }}"
-                                                   onclick="return confirm('Are you sure to finish this task?')">Finish</a>
-                                                |
-                                            @elseif($task['start_time'] === null)
-                                                <a href="{{ url('start-task') . '/' . $task['id'] }}"
-                                                   onclick="return confirm('Are you sure to start this task?')">Start</a>
-                                                |
-                                            @endif
-                                            <a href="{{ url('delete-task') . '/' . $task['id'] }}"
-                                               onclick="return confirm('Are you sure to delete this task?')">Delete</a>
-                                        </td>
+                            @if(count($meetings) > 0)
+                                @foreach($meetings as $meeting)
+                                    <tr class="meeting-table-row"
+                                        onclick="openMeetingDetailPopup('{{ $meeting['latitude'] }}', '{{ $meeting['longitude'] }}'
+                                                , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
+                                                '{{ $meeting['id'] }}', '{{ $meeting['location'] }}')">
+                                        <td>{{ $meeting->meetingType[0]->meeting_name }}</td>
+                                        <td>{{ $meeting['location'] }}</td>
                                     </tr>
                                 @endforeach
                             @else
-                                {{--<tr>
-                                    <td colspan="7" align="center">
-                                        No task found.
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        No Meeting found.
                                     </td>
-                                </tr>--}}
+                                </tr>
                             @endif
                             </tbody>
                         </table>
-                        {{ $tasks->links() }}
+                        {{ $meetings->links() }}
                     </div>
                 </div>
             </div>

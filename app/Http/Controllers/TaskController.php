@@ -33,7 +33,8 @@ class TaskController extends Controller
      */
     public function createForm()
     {
-        return view('create-task');
+
+        return view('create-meeting');
     }
 
     /**
@@ -52,7 +53,7 @@ class TaskController extends Controller
         }
         // save record in db.
         if ($this->task->store($request) instanceof Task) {
-            return redirect('dashboard')->with(['message' => 'Task created successfully.', 'status' => 'success']);
+            return redirect('dashboard')->with(['message' => 'Meeting created successfully.', 'status' => 'success']);
         }
 
         return redirect('dashboard')->with([
