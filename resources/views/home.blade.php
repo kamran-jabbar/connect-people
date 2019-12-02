@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <p>Welcome! You are logged in</p>
+                <p id="welcome-message">Welcome! You are logged in</p>
                 @if (\Session::has('status'))
                     <div class="alert alert-{!! \Session::get('status') !!}">
                         <ul id="create-meeting-error-li">
@@ -28,37 +28,25 @@
                                 <h2 class="modal-title" id="exampleModalLabel"></h2>
                             </div>
                             <div class="modal-body">
-                                <table class="table">
-                                    <thead>
-                                    <tr class="meeting-modal-heading">
-                                        <th scope="col">Meeting Time</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                    <tr class="meeting-modal-row meeting-row">
-                                        <td class="meeting-time">Science Park</td>
-                                        <td>
-                                            <a class="edit-meeting" href="">
-                                                <span class="glyphicon glyphicon-edit icon-custom-style"></span>
-                                            </a>
-                                            <a class="delete-meeting" href=""  onclick="return confirm('Are you sure to delete this meeting?')">
-                                                <span class="glyphicon glyphicon-trash icon-custom-style"></span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    </thead>
-                                </table>
-                                <div id="map-area"></div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <div id="action-icon">
+                                    <a class="track-meeting" href="">
+                                        <span class="glyphicon glyphicon-random icon-custom-style"></span>
+                                    </a>
+                                    <a class="edit-meeting" href="">
+                                        <span class="glyphicon glyphicon-edit icon-custom-style"></span>
+                                    </a>
+                                    <a class="delete-meeting" href=""
+                                       onclick="return confirm('Are you sure to delete this meeting?')">
+                                        <span class="glyphicon glyphicon-trash icon-custom-style"></span>
+                                    </a>
+                                </div>
+                                <div id="map-area-modal"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading meeting-heading">
                         Meetings
                         <a href="{{ url('create-meeting') }}" id="create-meeting-icon">
                             <span class="glyphicon glyphicon-plus-sign create-meeting"></span>
@@ -80,7 +68,7 @@
                                                 , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
                                                 '{{ $meeting['id'] }}', '{{ $meeting['location'] }}')">
                                         <td>{{ $meeting->meetingType[0]->meeting_name }}</td>
-                                        <td>{{ $meeting['location'] }}</td>
+                                        <td>{{ str_limit($meeting['location'], $limit = 16, $end = '...') }}</td>
                                     </tr>
                                 @endforeach
                             @else

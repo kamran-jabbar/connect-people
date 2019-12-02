@@ -22,5 +22,6 @@ Route::get('/create-meeting', 'MeetingController@createMeetingForm');
 Route::post('/create-meeting', 'MeetingController@storeMeeting');
 Route::get('/edit-meeting/{id}', 'MeetingController@editMeeting');
 Route::get('/delete-meeting/{id}', 'MeetingController@deleteMeeting');
-Route::get('/start-task/{id}', 'MeetingController@start');
+Route::get('/track-meeting/{id}', 'MeetingController@trackMeeting');
+Route::get('/track-friends/{id}', 'MeetingController@trackFriends');
 Route::get('/finish-task/{id}', 'MeetingController@finish');

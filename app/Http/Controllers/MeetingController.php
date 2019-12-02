@@ -61,7 +61,12 @@ class MeetingController extends Controller
             'time' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
-        ]);
+        ],
+        [
+            'meeting_type_id.required' => 'Meeting type is required.',
+            'meeting_type_id.integer' => 'Meeting type is required.'
+        ]
+        );
 
         if (!$validatedData) {
             return view('create-meeting');
@@ -76,11 +81,17 @@ class MeetingController extends Controller
                 'longitude' => Input::get('longitude')
             ];
             if ($this->meeting->storeMeeting($meetingUpdateData, Input::get('id')) === true) {
-                return redirect('dashboard')->with(['message' => 'Meeting updated successfully.', 'status' => 'success']);
+                return redirect('dashboard')->with([
+                    'message' => 'Meeting updated successfully.',
+                    'status' => 'success'
+                ]);
             }
         } else {
             if ($this->meeting->storeMeeting($request) instanceof Meeting) {
-                return redirect('dashboard')->with(['message' => 'Meeting created successfully.', 'status' => 'success']);
+                return redirect('dashboard')->with([
+                    'message' => 'Meeting created successfully.',
+                    'status' => 'success'
+                ]);
             }
         }
 
@@ -145,5 +156,29 @@ class MeetingController extends Controller
             'message' => 'Failed to start the finish, please try again.',
             'status' => 'danger'
         ]);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function trackMeeting($id)
+    {
+        return view('track-meeting', [
+                'meeting_detail' => $this->meeting->getMeetingById($id),
+            ]
+        );
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function trackFriends($id)
+    {
+        return view('track-friends', [
+                'meeting_detail' => $this->meeting->getMeetingById($id),
+            ]
+        );
     }
 }

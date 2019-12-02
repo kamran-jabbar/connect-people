@@ -3,17 +3,25 @@
     width: 298px;
 }
 
+#map-area-modal {
+    height: 445px;
+    width: 298px;
+}
+
 #create-meeting-submit-icon {
     margin: 0 auto;
     display: block;
 }
 
 #create-meeting-error-li {
-    list-style-type: none
+    list-style-type: none;
+    font-size: 18px;
+    margin-left: -23px;
 }
 
 .icon-custom-style {
-    padding-right: 10px;
+    padding-right: 40px;
+    padding-left: 21px;
 }
 
 .meeting-modal-row {
@@ -30,15 +38,38 @@
 }
 
 .meeting-table-heading {
-    font-size: 13px;
+    font-size: 18px;
 }
 
 .meeting-table-row {
     cursor: pointer;
     color: blue;
-    font-size: 13px;
+    font-size: 18px;
 }
 
 #create-meeting-icon {
     color: #6f6f6f;
+}
+
+.meeting-heading {
+    font-size: 18px;
+}
+
+#welcome-message {
+    font-size: 18px;
+}
+
+.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc /*, .gm-svpc*/,
+a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] {
+    display: none;
+}
+
+#action-icon {
+    font-size: 32px;
+}
+
+#map-area-tracking {
+    height: 589px;
+    width: 360px;
+    margin-top: -20px;
 }

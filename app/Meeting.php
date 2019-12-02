@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class Task
+ * Class Meeting
  * @package App
  */
 class Meeting extends Model
 {
-    const DEFAULT_PAGINATION_LIMIT = 10;
+    const DEFAULT_PAGINATION_LIMIT = 7;
 
     public $table = 'meeting';
 
@@ -39,8 +39,8 @@ class Meeting extends Model
 
     /**
      * @param $request
-     * @param $updateId
-     * @return int
+     * @param string $updateId
+     * @return bool
      */
     public function storeMeeting($request, $updateId = '')
     {
@@ -66,7 +66,8 @@ class Meeting extends Model
      */
     public function getMeetingList()
     {
-        return Meeting::with('meetingType')->where(['user_id' => auth()->user()->id])->paginate(self::DEFAULT_PAGINATION_LIMIT);
+        return Meeting::with('meetingType')->where(['user_id' => auth()->user()->id])->orderBy('created_at', 'DESC')->paginate(
+            self::DEFAULT_PAGINATION_LIMIT);
     }
 
     /**
