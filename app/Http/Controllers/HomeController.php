@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Meeting;
 use App\Task;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class HomeController

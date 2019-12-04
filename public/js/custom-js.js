@@ -8,7 +8,7 @@
  * @param location
  */
 function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, location) {
-    loadMap(lat, lng, location + '-' + meeting_time);
+    loadMap(lat, lng, location, meeting_time);
     $('.modal-title').text(meeting_type);
     $('.meeting-time').text(meeting_time);
     $('.delete-meeting').attr('href', '/delete-meeting/' + id);
@@ -22,26 +22,24 @@ function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, locati
  * @param lat
  * @param lng
  * @param meeting_name
+ * @param meeting_time
  */
-function loadMap(lat, lng, meeting_name) {
+function loadMap(lat, lng, meeting_name, meeting_time) {
     var latlng = new google.maps.LatLng(lat, lng);
     map = new google.maps.Map(document.getElementById('map-area-modal'), {
         center: latlng,
         zoom: 16
     });
+    var infowindow = new google.maps.InfoWindow();
     marker = new google.maps.Marker({
         draggable: false,
-        label: {
-            text: meeting_name,
-            color: 'black',
-            fontWeight: 'bold',
-            fontSize: '20px'
-        },
         position: latlng,
         map: map,
         icon: {
-            labelOrigin: new google.maps.Point(20, -10),
-            url: '/icon.png'
+            labelOrigin: new google.maps.Point(30, -10),
+            url: '/meeting-destination.png'
         }
     });
+    infowindow.setContent('<img id="meeting-image" src="/meeting-picture.png"><br><b>' + meeting_name + '</b>' + '<br><b>' + meeting_time + '</b>');
+    infowindow.open(map, marker);
 }

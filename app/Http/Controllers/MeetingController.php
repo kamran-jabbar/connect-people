@@ -6,6 +6,7 @@ use App\Meeting;
 use App\Meeting_Type;
 use App\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 /**
@@ -128,44 +129,13 @@ class MeetingController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function start($id)
-    {
-        if ($this->task->updateById($id, Task::TASK_START_TIME_FIELD_NAME)) {
-            return redirect('dashboard')->with(['message' => 'Task started successfully.', 'status' => 'success']);
-        }
-
-        return redirect('dashboard')->with([
-            'message' => 'Failed to start the task, please try again.',
-            'status' => 'danger'
-        ]);
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function finish($id)
-    {
-        if ($this->task->updateById($id, Task::TASK_FINISH_TIME_FIELD_NAME)) {
-            return redirect('dashboard')->with(['message' => 'Task finished successfully.', 'status' => 'success']);
-        }
-
-        return redirect('dashboard')->with([
-            'message' => 'Failed to start the finish, please try again.',
-            'status' => 'danger'
-        ]);
-    }
-
-    /**
-     * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function trackMeeting($id)
     {
         return view('track-meeting', [
                 'meeting_detail' => $this->meeting->getMeetingById($id),
+                'user_name' => auth()->user()->name
             ]
         );
     }

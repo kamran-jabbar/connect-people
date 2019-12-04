@@ -16,7 +16,44 @@
                         </ul>
                     </div>
             @endif
-            <!-- Modal -->
+                <div class="panel panel-default">
+                    <div class="panel-heading meeting-heading">
+                        Meetings
+                        <a href="{{ url('create-meeting') }}" id="create-meeting-icon">
+                            <span class="glyphicon glyphicon-plus-sign create-meeting"></span>
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <tr class="meeting-table-heading">
+                                <th scope="col">Type</th>
+                                <th scope="col">Location</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if(count($meetings) > 0)
+                                @foreach($meetings as $meeting)
+                                    <tr class="meeting-table-row"
+                                        onclick="openMeetingDetailPopup('{{ $meeting['latitude'] }}', '{{ $meeting['longitude'] }}'
+                                                , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
+                                                '{{ $meeting['id'] }}', '{{ str_limit($meeting['location'], $limit = 35, $end = '.') }}')">
+                                        <td>{{ $meeting->meetingType[0]->meeting_name }}</td>
+                                        <td>{{ str_limit($meeting['location'], $limit = 16, $end = '...') }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        No Meeting found.
+                                    </td>
+                                </tr>
+                            @endif
+                            </tbody>
+                        </table>
+                        {{ $meetings->links() }}
+                    </div>
+                </div>
                 <div class="modal fade" id="meeting-popup" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -43,44 +80,6 @@
                                 <div id="map-area-modal"></div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading meeting-heading">
-                        Meetings
-                        <a href="{{ url('create-meeting') }}" id="create-meeting-icon">
-                            <span class="glyphicon glyphicon-plus-sign create-meeting"></span>
-                        </a>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table">
-                            <thead>
-                            <tr class="meeting-table-heading">
-                                <th scope="col">Type</th>
-                                <th scope="col">Location</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @if(count($meetings) > 0)
-                                @foreach($meetings as $meeting)
-                                    <tr class="meeting-table-row"
-                                        onclick="openMeetingDetailPopup('{{ $meeting['latitude'] }}', '{{ $meeting['longitude'] }}'
-                                                , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
-                                                '{{ $meeting['id'] }}', '{{ $meeting['location'] }}')">
-                                        <td>{{ $meeting->meetingType[0]->meeting_name }}</td>
-                                        <td>{{ str_limit($meeting['location'], $limit = 16, $end = '...') }}</td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="2" align="center">
-                                        No Meeting found.
-                                    </td>
-                                </tr>
-                            @endif
-                            </tbody>
-                        </table>
-                        {{ $meetings->links() }}
                     </div>
                 </div>
             </div>

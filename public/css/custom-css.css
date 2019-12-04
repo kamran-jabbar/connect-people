@@ -59,7 +59,7 @@
     font-size: 18px;
 }
 
-.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc /*, .gm-svpc*/,
+.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc , .gm-svpc,
 a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] {
     display: none;
 }
@@ -72,4 +72,10 @@ a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] 
     height: 589px;
     width: 360px;
     margin-top: -20px;
+}
+
+#meeting-image {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }

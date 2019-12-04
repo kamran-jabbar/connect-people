@@ -80,16 +80,6 @@ class Meeting extends Model
     }
 
     /**
-     * @param $id
-     * @param $dbField
-     * @return Task
-     */
-    public function updateById($id, $dbField)
-    {
-        return Task::where(['user_id' => auth()->user()->id, 'id' => $id])->update([$dbField => new Carbon()]);
-    }
-
-    /**
      * @param $meetingId
      * @return int
      */
