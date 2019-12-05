@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @push('head')
-    <script src="http://maps.google.com/maps/api/js?libraries=places&key=AIzaSyBE3ApJmvci0C2rTN1A6en5vj2Uuo3R6LA"></script>
+    <script src="http://maps.google.com/maps/api/js?libraries=places&key={{env('GOOLE_MAP_API_KEY')}}"></script>
     <script src="{{ asset('js/custom-js.js') }}"></script>
     <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">
     @endpush
@@ -66,14 +66,18 @@
                             </div>
                             <div class="modal-body">
                                 <div id="action-icon">
-                                    <a class="track-meeting" href="">
+                                    <a class="track-meeting" href="" title="Track Meeting">
                                         <span class="glyphicon glyphicon-random icon-custom-style"></span>
                                     </a>
-                                    <a class="edit-meeting" href="">
+                                    <a class="edit-meeting" href="" title="Edit Meeting">
                                         <span class="glyphicon glyphicon-edit icon-custom-style"></span>
                                     </a>
+                                    <a class="track-friends" href="" title="Track Friend Location">
+                                        <span class="glyphicon glyphicon-user icon-custom-style"></span>
+                                    </a>
                                     <a class="delete-meeting" href=""
-                                       onclick="return confirm('Are you sure to delete this meeting?')">
+                                       onclick="return confirm('Are you sure to delete this meeting?')"
+                                       title="Delete Meeting">
                                         <span class="glyphicon glyphicon-trash icon-custom-style"></span>
                                     </a>
                                 </div>

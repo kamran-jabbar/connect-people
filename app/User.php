@@ -34,4 +34,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'user_id', 'id');
     }
+
+    /**
+     * @return User
+     */
+    public function getOtherUsers()
+    {
+        return  User::select('name', 'latitude', 'longitude', 'location')->where('id', '<>' , auth()->user()->id)->get();
+    }
+
+    /**
+     * @return User
+     */
+    public function getCurrentUser()
+    {
+        return  User::select('name', 'latitude', 'longitude', 'location')->where('id', '=' , auth()->user()->id)->get();
+    }
 }

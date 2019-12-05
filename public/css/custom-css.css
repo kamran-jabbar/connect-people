@@ -20,8 +20,7 @@
 }
 
 .icon-custom-style {
-    padding-right: 40px;
-    padding-left: 21px;
+    padding-right: 35px;
 }
 
 .meeting-modal-row {
@@ -59,13 +58,14 @@
     font-size: 18px;
 }
 
-.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc , .gm-svpc,
+.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc, .gm-svpc,
 a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] {
     display: none;
 }
 
 #action-icon {
     font-size: 32px;
+    text-align: center;
 }
 
 #map-area-tracking {
@@ -78,4 +78,8 @@ a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] 
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+@media screen and (min-width: 768px) {
+
 }

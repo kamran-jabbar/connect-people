@@ -14,6 +14,7 @@ function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, locati
     $('.delete-meeting').attr('href', '/delete-meeting/' + id);
     $('.edit-meeting').attr('href', '/edit-meeting/' + id);
     $('.track-meeting').attr('href', '/track-meeting/' + id);
+    $('.track-friends').attr('href', '/track-friends/' + id);
     $('#meeting-popup').modal('show');
 
 }

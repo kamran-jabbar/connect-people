@@ -66,7 +66,7 @@ class Meeting extends Model
      */
     public function getMeetingList()
     {
-        return Meeting::with('meetingType')->where(['user_id' => auth()->user()->id])->orderBy('created_at', 'DESC')->paginate(
+        return Meeting::with('meetingType')->orderBy('created_at', 'DESC')->paginate(
             self::DEFAULT_PAGINATION_LIMIT);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Meeting;
 use App\Meeting_Type;
 use App\Task;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -28,15 +29,23 @@ class MeetingController extends Controller
     private $meetingType;
 
     /**
+     * The user model implementation.
+     * @var User
+     */
+    private $user;
+
+    /**
      * MeetingController constructor.
      * @param Meeting $meeting
      * @param Meeting_Type $meetingType
+     * @param User $user
      */
-    public function __construct(Meeting $meeting, Meeting_Type $meetingType)
+    public function __construct(Meeting $meeting, Meeting_Type $meetingType, User $user)
     {
         $this->middleware('auth');
         $this->meeting = $meeting;
         $this->meetingType = $meetingType;
+        $this->user = $user;
     }
 
     /**
@@ -148,6 +157,8 @@ class MeetingController extends Controller
     {
         return view('track-friends', [
                 'meeting_detail' => $this->meeting->getMeetingById($id),
+                'otherUsers' => $this->user->getOtherUsers(),
+                'currentUser' => $this->user->getCurrentUser()
             ]
         );
     }
