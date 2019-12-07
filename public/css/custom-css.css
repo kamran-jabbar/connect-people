@@ -69,17 +69,43 @@ a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] 
 }
 
 #map-area-tracking {
-    height: 589px;
-    width: 360px;
+    height: 100%;
+    width: 100%;
+    /*
     margin-top: -20px;
+    */
+    /*
+    margin-top: -20px;
+    */
+    overflow: unset !important;
+    position: fixed !important;
 }
 
 #meeting-image {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+margin-left: auto;
+margin-right: auto;
+display: block;
 }
 
-@media screen and (min-width: 768px) {
+.fa-icon-custom-style {
+    font-size: 37px;
+    padding: 16px;
+    margin-left: 20px;
+}
 
+#travelModeChoice {
+    margin-top: 19px;
+}
+
+.modal-backdrop.in {
+    opacity: 0.9;
+}
+
+#create-meeting-action-btn {
+    text-align: center;
+}
+
+.btn-display-create-mtg {
+    display: inline !important;
+    margin: 6px !important
 }

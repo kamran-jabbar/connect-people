@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
  */
 class MeetingController extends Controller
 {
+    const WALKING = 'WALKING';
     /**
      * The Meeting model implementation.
      * @var Meeting
@@ -137,29 +138,46 @@ class MeetingController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function trackMeeting($id)
+    public function trackMeeting(Request $request, $id)
     {
         return view('track-meeting', [
                 'meeting_detail' => $this->meeting->getMeetingById($id),
-                'user_name' => auth()->user()->name
+                'currentUser' => $this->user->getCurrentUser(),
+                'mode' =>  $this->matchTravellingMode($request->get('mode'))
             ]
         );
     }
 
     /**
+     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function trackFriends($id)
+    public function trackFriends(Request $request, $id)
     {
         return view('track-friends', [
                 'meeting_detail' => $this->meeting->getMeetingById($id),
                 'otherUsers' => $this->user->getOtherUsers(),
-                'currentUser' => $this->user->getCurrentUser()
+                'currentUser' => $this->user->getCurrentUser(),
+                'mode' =>  $this->matchTravellingMode($request->get('mode'))
             ]
         );
     }
+
+    /**
+     * @param $mode
+     * @return string
+     */
+    private function matchTravellingMode($mode)
+    {
+        if($mode === 'walking' || $mode === 'bicycling' || $mode === 'driving' || $mode === 'transit') {
+            return strtoupper($mode);
+        }
+        return self::WALKING;
+    }
+
 }

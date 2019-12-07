@@ -1,95 +1,268 @@
-function getLocation() {
-    if (navigator.geolocation) {
-        return navigator.geolocation.getCurrentPosition(showPosition);
+var map;
+var directionsService;
+var stepDisplay;
+var position;
+var marker = null;
+var polyline = null;
+var poly2 = null;
+var infowindow = null;
+var timerHandle = null;
+currentUserDecodeData = JSON.parse(currentUserData);
+
+function createMarker(latlng, html, markerIcon) {
+    var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        icon: markerIcon,
+        draggable: false
+    });
+    infowindow.setContent('<b>' + html + '<b>');
+    infowindow.open(map, marker);
+    google.maps.event.addListener(marker, "click", function() {
+        infowindow.open(map, marker);
+    });
+
+    return marker;
+}
+
+function initialize() {
+    infowindow = new google.maps.InfoWindow(
+        {
+            size: new google.maps.Size(150, 50)
+        });
+    // Instantiate a directions service.
+    directionsService = new google.maps.DirectionsService();
+
+    var myOptions = {
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map-area-tracking"), myOptions);
+    var trafficLayer = new google.maps.TrafficLayer();
+    trafficLayer.setMap(map);
+    address = currentUserDecodeData[0]['location']
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address': address}, function (results, status) {
+        //map.setCenter(results[0].geometry.location);
+    });
+
+    // Create a renderer for directions and bind it to the map.
+    var rendererOptions = {
+        map: map,
+        suppressMarkers: true
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+
+    // Instantiate an info window to hold step text.
+    stepDisplay = new google.maps.InfoWindow();
+
+    polyline = new google.maps.Polyline({
+        path: [],
+        strokeColor: 'blue',
+        strokeWeight: 3
+    });
+    poly2 = new google.maps.Polyline({
+        path: [],
+        strokeColor: 'blue',
+        strokeWeight: 3
+    });
+}
+
+
+var steps = []
+
+function calcRoute() {
+
+    if (timerHandle) {
+        clearTimeout(timerHandle);
+    }
+    if (marker) {
+        marker.setMap(null);
+    }
+    polyline.setMap(null);
+    poly2.setMap(null);
+    directionsDisplay.setMap(null);
+    polyline = new google.maps.Polyline({
+        path: [],
+        strokeColor: 'blue',
+        strokeWeight: 3
+    });
+    poly2 = new google.maps.Polyline({
+        path: [],
+        strokeColor: 'blue',
+        strokeWeight: 3
+    });
+    // Create a renderer for directions and bind it to the map.
+    var rendererOptions = {
+        map: map,
+        suppressMarkers: true
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+    var end = meeting_name;
+    var start = currentUserDecodeData[0]['location'];
+    travelMode = google.maps.DirectionsTravelMode[travelModeCustom];
+
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: travelMode
+    };
+
+    // Route the directions and pass the response to a
+    // function to create markers for each step.
+    directionsService.route(request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            var bounds = new google.maps.LatLngBounds();
+            var route = response.routes[0];
+            startLocation = new Object();
+            endLocation = new Object();
+            // For each route, display summary information.
+            var path = response.routes[0].overview_path;
+            var legs = response.routes[0].legs;
+            for (i = 0; i < legs.length; i++) {
+                if (i == 0) {
+                    startLocation.latlng = legs[i].start_location;
+                    startLocation.address = legs[i].start_address;
+                    marker = createMarker(legs[i].start_location, legs[i].start_address, "/meeting-destination.png");
+                }
+                endLocation.latlng = legs[i].end_location;
+                endLocation.address = legs[i].end_address;
+                var steps = legs[i].steps;
+                for (j = 0; j < steps.length; j++) {
+                    var nextSegment = steps[j].path;
+                    for (k = 0; k < nextSegment.length; k++) {
+                        polyline.getPath().push(nextSegment[k]);
+                        bounds.extend(nextSegment[k]);
+                    }
+                }
+            }
+            polyline.setMap(map);
+            map.fitBounds(bounds);
+            var service = new google.maps.DistanceMatrixService;
+            service.getDistanceMatrix({
+                origins: [start],
+                destinations: [end],
+                travelMode: travelModeCustom,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                if (status !== 'OK') {
+                    alert('Error was: ' + status);
+                } else {
+                    var originList = response.originAddresses;
+                    var destinationList = response.destinationAddresses;
+                    var results = response.rows[0].elements;
+                    var timeAndDistance = results[0].distance.text + ' ' + results[0].duration.text;
+                    var startAddress = startLocation.address.split(" ");
+                    var endAddress = endLocation.address.split(" ");
+                    createMarker(startLocation.latlng, startAddress[0] + '<br>' + endAddress[0] + '<br>' + timeAndDistance, "/current-location.png");
+                }
+            });
+            createMarker(endLocation.latlng, endLocation.address, "/meeting-destination.png");
+
+            map.setZoom(50);
+            startAnimation();
+        }
+    });
+}
+
+
+var step = 25; // 5; // metres
+var tick = 100; // milliseconds
+var eol;
+var k = 0;
+var stepnum = 0;
+var speed = "";
+var lastVertex = 1;
+
+
+//=============== animation functions ======================
+function updatePoly(d) {
+    if (poly2.getPath().getLength() > 20) {
+        poly2 = new google.maps.Polyline([polyline.getPath().getAt(lastVertex - 1)]);
+    }
+
+    if (polyline.GetIndexAtDistance(d) < lastVertex + 2) {
+        if (poly2.getPath().getLength() > 1) {
+            poly2.getPath().removeAt(poly2.getPath().getLength() - 1)
+        }
+        poly2.getPath().insertAt(poly2.getPath().getLength(), polyline.GetPointAtDistance(d));
     } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        poly2.getPath().insertAt(poly2.getPath().getLength(), endLocation.latlng);
     }
 }
 
-function showPosition(position) {
-    userLat = position.coords.latitude;
-    userLng = position.coords.longitude;
+
+function animate(d) {
+    if (d > eol) {
+        map.panTo(endLocation.latlng);
+        marker.setPosition(endLocation.latlng);
+        return;
+    }
+    var p = polyline.GetPointAtDistance(d);
+    map.panTo(p);
+    map.panTo(p);
+    map.setZoom(15);
+    marker.setPosition(p);
+    updatePoly(d);
+    timerHandle = setTimeout("animate(" + (d + step) + ")", tick);
 }
 
-function error(position) {
-    userLat = position.coords.latitude;
-    userLng = position.coords.longitude;
+
+function startAnimation() {
+    eol = google.maps.geometry.spherical.computeLength(polyline.getPath());
+    map.setCenter(polyline.getPath().getAt(0));
+    poly2 = new google.maps.Polyline({path: [polyline.getPath().getAt(0)], strokeColor: "#0000FF", strokeWeight: 10});
+    setTimeout("animate(50)", 2000);  // Allow time for the initial map display
 }
 
-/**
- * @param lat
- * @param lng
- * @param meeting_name
- */
-function loadMap(lat, lng, meeting_name, time, user_name) {
-    var latlng = new google.maps.LatLng(lat, lng);
-    navigator.geolocation.getCurrentPosition(function (position) {
-        showPosition(position);
-        var userLatLng = new google.maps.LatLng(62.5883,29.7708);
-        map = new google.maps.Map(document.getElementById('map-area-tracking'), {
-            center: userLatLng,
-            zoom: 16,
-            mapTypeId: google.maps.MapTypeId.ROADMAPS
-        });
-
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRequest = {
-            origin: userLatLng,
-            destination: latlng,
-            travelMode: google.maps.DirectionsTravelMode.WALKING,
-            unitSystem: google.maps.UnitSystem.METRIC
-        };
-        directionsService.route(
-            directionsRequest,
-            function (response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    new google.maps.DirectionsRenderer({
-                        map: map,
-                        directions: response,
-                        suppressMarkers: true
-                    });
-                    var leg = response.routes[0].legs[0];
-                    userImage = '<span class="glyphicon glyphicon-user"></span>';
-                    targetImage = '<img id="meeting-image" src="/meeting-picture.png">';
-                    makeMarker(leg.start_location, icons.start, user_name, map, userImage);
-                    makeMarker(leg.end_location, icons.end, meeting_name + '<br>' + time, map, targetImage);
-                }
-            }
-        );
-    }, error);
-
-
+google.maps.LatLng.prototype.latRadians = function () {
+    return this.lat() * Math.PI / 180;
 }
 
-function makeMarker(position, icon, title, map, image) {
-    marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        icon: icon
-    });
-    var infowindow = new google.maps.InfoWindow();
-    infowindow.setContent(image + '<br><b>' + title);
-    infowindow.open(map, marker);
+google.maps.LatLng.prototype.lngRadians = function () {
+    return this.lng() * Math.PI / 180;
 }
 
-var icons = {
-    start: new google.maps.MarkerImage(
-        // URL
-        '/current-location.png',
-        // (width,height)
-        new google.maps.Size(44, 32),
-        // The origin point (x,y)
-        new google.maps.Point(0, 0),
-        // The anchor point (x,y)
-        new google.maps.Point(15, 20)
-    ),
-    end: new google.maps.MarkerImage(
-        // URL
-        '/meeting-destination.png',
-        // (width,height)
-        new google.maps.Size(50, 50),
-        // The origin point (x,y)
-        new google.maps.Point(0, 0),
-        // The anchor point (x,y)
-        new google.maps.Point(10, 50))
-};
+google.maps.Polyline.prototype.GetPointAtDistance = function (metres) {
+    // some awkward special cases
+    if (metres == 0) return this.getPath().getAt(0);
+    if (metres < 0) return null;
+    if (this.getPath().getLength() < 2) return null;
+    var dist = 0;
+    var olddist = 0;
+    for (var i = 1; (i < this.getPath().getLength() && dist < metres); i++) {
+        olddist = dist;
+        dist += google.maps.geometry.spherical.computeDistanceBetween(this.getPath().getAt(i), this.getPath().getAt(i - 1));
+    }
+    if (dist < metres) {
+        return null;
+    }
+    var p1 = this.getPath().getAt(i - 2);
+    var p2 = this.getPath().getAt(i - 1);
+    var m = (metres - olddist) / (dist - olddist);
+    return new google.maps.LatLng(p1.lat() + (p2.lat() - p1.lat()) * m, p1.lng() + (p2.lng() - p1.lng()) * m);
+}
+
+// === A method which returns the Vertex number at a given distance along the path ===
+// === Returns null if the path is shorter than the specified distance ===
+google.maps.Polyline.prototype.GetIndexAtDistance = function (metres) {
+    // some awkward special cases
+    if (metres == 0) return this.getPath().getAt(0);
+    if (metres < 0) return null;
+    var dist = 0;
+    var olddist = 0;
+    for (var i = 1; (i < this.getPath().getLength() && dist < metres); i++) {
+        olddist = dist;
+        dist += google.maps.geometry.spherical.computeDistanceBetween(this.getPath().getAt(i), this.getPath().getAt(i - 1));
+    }
+    if (dist < metres) {
+        return null;
+    }
+    return i;
+}
+
+
+

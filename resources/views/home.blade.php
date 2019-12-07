@@ -4,6 +4,11 @@
     <script src="http://maps.google.com/maps/api/js?libraries=places&key={{env('GOOLE_MAP_API_KEY')}}"></script>
     <script src="{{ asset('js/custom-js.js') }}"></script>
     <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">
+    <link href="{{ asset('http://glyphsearch.com/bower_components/font-awesome/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('http://glyphsearch.com/bower_components/foundation-icon-fonts/foundation-icons.css') }}"
+          rel="stylesheet">
+    <link href="{{ asset('http://glyphsearch.com/bower_components/material-design-icons/iconfont/material-icons.css') }}"
+          rel="stylesheet">
     @endpush
     <div class="container">
         <div class="row">
@@ -15,7 +20,7 @@
                             <li>{!! \Session::get('message') !!}</li>
                         </ul>
                     </div>
-            @endif
+                @endif
                 <div class="panel panel-default">
                     <div class="panel-heading meeting-heading">
                         Meetings
@@ -34,7 +39,16 @@
                             <tbody>
                             @if(count($meetings) > 0)
                                 @foreach($meetings as $meeting)
-                                    <tr class="meeting-table-row"
+                                    @php
+                                        $timenow = date($meeting['time']);
+                                        $timestamp = strtotime($timenow);
+                                        $style = '';
+                                        if(time() > $timestamp )
+                                        {
+                                            $style = 'style="color:red"';
+                                        }
+                                    @endphp
+                                    <tr {!! $style !!} class="meeting-table-row"
                                         onclick="openMeetingDetailPopup('{{ $meeting['latitude'] }}', '{{ $meeting['longitude'] }}'
                                                 , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
                                                 '{{ $meeting['id'] }}', '{{ str_limit($meeting['location'], $limit = 35, $end = '.') }}')">
@@ -69,11 +83,11 @@
                                     <a class="track-meeting" href="" title="Track Meeting">
                                         <span class="glyphicon glyphicon-random icon-custom-style"></span>
                                     </a>
-                                    <a class="edit-meeting" href="" title="Edit Meeting">
-                                        <span class="glyphicon glyphicon-edit icon-custom-style"></span>
-                                    </a>
                                     <a class="track-friends" href="" title="Track Friend Location">
                                         <span class="glyphicon glyphicon-user icon-custom-style"></span>
+                                    </a>
+                                    <a class="edit-meeting" href="" title="Edit Meeting">
+                                        <span class="glyphicon glyphicon-edit icon-custom-style"></span>
                                     </a>
                                     <a class="delete-meeting" href=""
                                        onclick="return confirm('Are you sure to delete this meeting?')"
@@ -82,6 +96,28 @@
                                     </a>
                                 </div>
                                 <div id="map-area-modal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="travelModeChoice" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-backdrop="static"
+                     data-keyboard="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <a class="track-meeting-walk" title="Walking">
+                                    <i class="fa fa-walking fa-icon-custom-style"></i>
+                                </a>
+                                <a class="track-meeting-bike" href="" title="Bicycle">
+                                    <i class="fa fa-bicycle fa-icon-custom-style"></i>
+                                </a>
+                                <a class="track-meeting-driving" href="" title="Car">
+                                    <i class="fa fa-car fa-icon-custom-style"></i>
+                                </a>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -44,37 +44,44 @@
                             </div>
                         @endif
                         {!! Form::open(array('url' => 'create-meeting')) !!}
-                            <div class="form-group">
-                                <select name="meeting_type_id" class="form-control">
-                                    <option>Meeting Type</option>
-                                    @foreach($meeting_types as $meeting_type)
-                                        <option value="{{ $meeting_type['id'] }}"
-                                        {{isset($meeting_detail[0]['meeting_type_id']) && $meeting_type['id'] == $meeting_detail[0]['meeting_type_id'] ? "selected" : ""}}>
-                                            {{ $meeting_type['meeting_name'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                {!! Form::text('time',  isset($meeting_detail) ? $meeting_detail[0]['time'] : old('time'), ['class'=>'form-control meeting-time',
-                                'placeholder'=>'Meeting Time']) !!}
-                            </div>
-                            <div class="form-group">
-                                {!! Form::text('location', isset($meeting_detail) ? $meeting_detail[0]['location'] : old('location'), ['class'=>'form-control',
-                                'id' => 'search-location', 'placeholder'=>'Meeting Location']) !!}
-                            </div>
-                            <div class="form-group">
-                                <div id="map-area"></div>
-                            </div>
-                            {!! Form::hidden('latitude', old('latitude'), ['id' => 'latitude']) !!}
-                            {!! Form::hidden('longitude', old('longitude'), ['id' => 'longitude']) !!}
-                            @if(isset($meeting_detail))
-                                {!! Form::hidden('update', '1') !!}
-                                {!! Form::hidden('id', $meeting_detail[0]['id']) !!}
-                            @endif
-                            <button type="submit" class="btn btn-primary" id="create-meeting-submit-icon">
+                        <div class="form-group">
+                            <select name="meeting_type_id" class="form-control">
+                                <option>Meeting Type</option>
+                                @foreach($meeting_types as $meeting_type)
+                                    <option value="{{ $meeting_type['id'] }}"
+                                            {{isset($meeting_detail[0]['meeting_type_id']) && $meeting_type['id'] == $meeting_detail[0]['meeting_type_id'] ? "selected" : ""}}>
+                                        {{ $meeting_type['meeting_name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            {!! Form::text('time',  isset($meeting_detail) ? $meeting_detail[0]['time'] : old('time'), ['class'=>'form-control meeting-time',
+                            'placeholder'=>'Meeting Time']) !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::text('location', isset($meeting_detail) ? $meeting_detail[0]['location'] : old('location'), ['class'=>'form-control',
+                            'id' => 'search-location', 'placeholder'=>'Meeting Location']) !!}
+                        </div>
+                        <div class="form-group">
+                            <div id="map-area"></div>
+                        </div>
+                        {!! Form::hidden('latitude', old('latitude'), ['id' => 'latitude']) !!}
+                        {!! Form::hidden('longitude', old('longitude'), ['id' => 'longitude']) !!}
+                        @if(isset($meeting_detail))
+                            {!! Form::hidden('update', '1') !!}
+                            {!! Form::hidden('id', $meeting_detail[0]['id']) !!}
+                        @endif
+                        <div id="create-meeting-action-btn">
+                            <a href="/dashboard" class="btn btn-primary btn-display-create-mtg"
+                               id="create-meeting-submit-icon">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-display-create-mtg"
+                                    id="create-meeting-submit-icon">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
+                        </div>
                         {!! Form::close() !!}
                     </div>
                 </div>

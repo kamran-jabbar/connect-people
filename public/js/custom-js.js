@@ -13,11 +13,29 @@ function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, locati
     $('.meeting-time').text(meeting_time);
     $('.delete-meeting').attr('href', '/delete-meeting/' + id);
     $('.edit-meeting').attr('href', '/edit-meeting/' + id);
-    $('.track-meeting').attr('href', '/track-meeting/' + id);
-    $('.track-friends').attr('href', '/track-friends/' + id);
+    $(".track-meeting").attr("id", id);
+    $('.track-friends').attr('id', id);
     $('#meeting-popup').modal('show');
 
 }
+
+$('.track-meeting').click(function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('.track-meeting-walk').attr('href', '/track-meeting/' + id + '?mode=walking');
+    $('.track-meeting-bike').attr('href', '/track-meeting/' + id + '?mode=bicycling');
+    $('.track-meeting-driving').attr('href', '/track-meeting/' + id + '?mode=driving');
+    $('#travelModeChoice').modal('show');
+});
+
+$('.track-friends').click(function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('.track-meeting-walk').attr('href', '/track-friends/' + id + '?mode=walking');
+    $('.track-meeting-bike').attr('href', '/track-friends/' + id + '?mode=bicycling');
+    $('.track-meeting-driving').attr('href', '/track-friends/' + id + '?mode=driving');
+    $('#travelModeChoice').modal('show');
+});
 
 /**
  * @param lat

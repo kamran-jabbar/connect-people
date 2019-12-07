@@ -6,10 +6,11 @@
 @endphp
 @section('content')
     @push('head')
-    <script src="http://maps.google.com/maps/api/js?libraries=places&key={{env('GOOLE_MAP_API_KEY')}}"></script>
+    <script src="http://maps.google.com/maps/api/js?libraries=geometry,places&key={{env('GOOLE_MAP_API_KEY')}}"></script>
     <script>
         var otherUserData = '{!! json_encode($otherUsers) !!}';
         var currentUserData = '{!! json_encode($currentUser) !!}';
+        var travelModeCustom = '{!! $mode !!}';
     </script>
     <script src="{{ asset('js/tracking-friends-custom-js.js') }}"></script>
     <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">

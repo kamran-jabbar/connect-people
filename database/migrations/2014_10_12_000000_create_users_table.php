@@ -18,9 +18,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('location');
+            $table->string('latitude')->default(62.591705);
+            $table->string('longitude')->default(29.767226);
+            $table->string('location')->default('Mäntyläntie, 80220 Joensuu');
             $table->rememberToken();
             $table->timestamps();
         });
