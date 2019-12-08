@@ -1,3 +1,6 @@
+/**
+ * Source: http://jsfiddle.net/geocodezip/kzcm02d6/136/
+ */
 var map;
 var directionsService;
 var stepDisplay;
@@ -9,6 +12,12 @@ var infowindow = null;
 var timerHandle = null;
 currentUserDecodeData = JSON.parse(currentUserData);
 
+/**
+ * @param latlng
+ * @param html
+ * @param markerIcon
+ * @returns {google.maps.Marker}
+ */
 function createMarker(latlng, html, markerIcon) {
     var marker = new google.maps.Marker({
         position: latlng,
@@ -25,6 +34,9 @@ function createMarker(latlng, html, markerIcon) {
     return marker;
 }
 
+/**
+ * Initialize tracking
+ */
 function initialize() {
     infowindow = new google.maps.InfoWindow(
         {
@@ -50,7 +62,7 @@ function initialize() {
     var rendererOptions = {
         map: map,
         suppressMarkers: true
-    }
+    };
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
 
     // Instantiate an info window to hold step text.
@@ -69,8 +81,11 @@ function initialize() {
 }
 
 
-var steps = []
+var steps = [];
 
+/**
+ * Start calculating the distance from destination
+ */
 function calcRoute() {
 
     if (timerHandle) {
@@ -96,7 +111,7 @@ function calcRoute() {
     var rendererOptions = {
         map: map,
         suppressMarkers: true
-    }
+    };
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     var end = meeting_name;
     var start = currentUserDecodeData[0]['location'];
@@ -178,7 +193,9 @@ var speed = "";
 var lastVertex = 1;
 
 
-//=============== animation functions ======================
+/**
+ * @param d
+ */
 function updatePoly(d) {
     if (poly2.getPath().getLength() > 20) {
         poly2 = new google.maps.Polyline([polyline.getPath().getAt(lastVertex - 1)]);
@@ -194,7 +211,9 @@ function updatePoly(d) {
     }
 }
 
-
+/**
+ * @param d
+ */
 function animate(d) {
     if (d > eol) {
         map.panTo(endLocation.latlng);
@@ -210,7 +229,9 @@ function animate(d) {
     timerHandle = setTimeout("animate(" + (d + step) + ")", tick);
 }
 
-
+/**
+ * Start animating on found path
+ */
 function startAnimation() {
     eol = google.maps.geometry.spherical.computeLength(polyline.getPath());
     map.setCenter(polyline.getPath().getAt(0));
@@ -220,11 +241,11 @@ function startAnimation() {
 
 google.maps.LatLng.prototype.latRadians = function () {
     return this.lat() * Math.PI / 180;
-}
+};
 
 google.maps.LatLng.prototype.lngRadians = function () {
     return this.lng() * Math.PI / 180;
-}
+};
 
 google.maps.Polyline.prototype.GetPointAtDistance = function (metres) {
     // some awkward special cases

@@ -19,7 +19,6 @@
     <script src="{{ asset('js/tracking-custom-js.js') }}"></script>
     <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">
     <script>
-        //window.onload = loadMap();
         window.onload = initialize();
         setTimeout(calcRoute(), 2000)
     </script>

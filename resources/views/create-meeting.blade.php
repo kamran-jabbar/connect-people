@@ -2,7 +2,8 @@
 @php
     $lat = isset($meeting_detail[0]['latitude']) ? $meeting_detail[0]['latitude'] : 62.6010;
     $lang = isset($meeting_detail[0]['longitude']) ? $meeting_detail[0]['longitude'] : 29.7636;
-    $time = isset($meeting_detail[0]['time']) ? (strtotime($meeting_detail[0]['time']) - 7200) * 1000 : 0;
+    $time = isset($meeting_detail[0]['time']) ? (strtotime($meeting_detail[0]['time']) - 7200) * 1000 : '';
+    echo $time;
 @endphp
 @section('content')
     @push('head')

@@ -1,5 +1,4 @@
 /**
- *
  * @param lat
  * @param lng
  * @param meeting_type

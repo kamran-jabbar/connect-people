@@ -1,3 +1,6 @@
+/**
+ * Styling is according to Samsung Galaxy S5
+ */
 #map-area {
     height: 295px;
     width: 298px;
@@ -71,12 +74,6 @@ a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] 
 #map-area-tracking {
     height: 100%;
     width: 100%;
-    /*
-    margin-top: -20px;
-    */
-    /*
-    margin-top: -20px;
-    */
     overflow: unset !important;
     position: fixed !important;
 }

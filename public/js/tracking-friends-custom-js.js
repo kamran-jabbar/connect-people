@@ -1,5 +1,4 @@
 /**
- *
  * @param lat
  * @param lng
  * @param meeting_type
@@ -17,6 +16,9 @@ function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, locati
 
 }
 
+/**
+ * get current location but that is not working and we are using latLng from DB.
+ */
 function getLocation() {
     if (navigator.geolocation) {
         return navigator.geolocation.getCurrentPosition(showPosition);
@@ -25,11 +27,17 @@ function getLocation() {
     }
 }
 
+/**
+ * @param position
+ */
 function showPosition(position) {
     userLat = position.coords.latitude;
     userLng = position.coords.longitude;
 }
 
+/**
+ * @param position
+ */
 function error(position) {
     userLat = position.coords.latitude;
     userLng = position.coords.longitude;
@@ -112,8 +120,6 @@ function loadMap(lat, lng, meeting_name) {
                                     });
                                     var infowindow = new google.maps.InfoWindow();
                                     map.fitBounds(bounds.extend(results[0].geometry.location));
-
-                                    distanceKm = '';
                                     if (isDestination) {
                                         var service = new google.maps.DistanceMatrixService;
                                         service.getDistanceMatrix({
@@ -150,7 +156,6 @@ function loadMap(lat, lng, meeting_name) {
                                         infowindow.setContent('<b>' + destinationAddress[0] + '</b>');
                                         infowindow.open(map, customMarker);
                                     }
-
                                 }
                             }
                         );
@@ -181,6 +186,9 @@ function loadMap(lat, lng, meeting_name) {
     });
 }
 
+/**
+ * @param markersArray
+ */
 function deleteMarkers(markersArray) {
     for (var i = 0; i < markersArray.length; i++) {
         markersArray[i].setMap(null);
