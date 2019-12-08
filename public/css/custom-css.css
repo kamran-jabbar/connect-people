@@ -1,5 +1,13 @@
+/**
+ * Styling is according to Samsung Galaxy S5
+ */
 #map-area {
-    height: 267px;
+    height: 295px;
+    width: 298px;
+}
+
+#map-area-modal {
+    height: 445px;
     width: 298px;
 }
 
@@ -9,11 +17,13 @@
 }
 
 #create-meeting-error-li {
-    list-style-type: none
+    list-style-type: none;
+    font-size: 18px;
+    margin-left: -23px;
 }
 
 .icon-custom-style {
-    padding-right: 10px;
+    padding-right: 35px;
 }
 
 .meeting-modal-row {
@@ -30,15 +40,69 @@
 }
 
 .meeting-table-heading {
-    font-size: 13px;
+    font-size: 18px;
 }
 
 .meeting-table-row {
     cursor: pointer;
     color: blue;
-    font-size: 13px;
+    font-size: 18px;
 }
 
 #create-meeting-icon {
     color: #6f6f6f;
+}
+
+.meeting-heading {
+    font-size: 18px;
+}
+
+#welcome-message {
+    font-size: 18px;
+}
+
+.gmnoprint a, .gmnoprint span, .gm-style-cc, .gm-style-mtc, .gm-svpc,
+a[href^="http://maps.google.com/maps"], a[href^="https://maps.google.com/maps"] {
+    display: none;
+}
+
+#action-icon {
+    font-size: 32px;
+    text-align: center;
+}
+
+#map-area-tracking {
+    height: 100%;
+    width: 100%;
+    overflow: unset !important;
+    position: fixed !important;
+}
+
+#meeting-image {
+margin-left: auto;
+margin-right: auto;
+display: block;
+}
+
+.fa-icon-custom-style {
+    font-size: 37px;
+    padding: 16px;
+    margin-left: 20px;
+}
+
+#travelModeChoice {
+    margin-top: 19px;
+}
+
+.modal-backdrop.in {
+    opacity: 0.9;
+}
+
+#create-meeting-action-btn {
+    text-align: center;
+}
+
+.btn-display-create-mtg {
+    display: inline !important;
+    margin: 6px !important
 }

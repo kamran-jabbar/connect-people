@@ -1,60 +1,63 @@
-$(document).ready(function () {
-    /*$(function () {
-        $('.meeting-time').datetimepicker({
-            format: 'DD.MM.YYYY HH:mm',
-            minDate: new Date()
-        });
-    });*/
-
-
-});
-$(".meeting-table-row").click(function () {
-    loadMap();
+/**
+ * @param lat
+ * @param lng
+ * @param meeting_type
+ * @param meeting_time
+ * @param id
+ * @param location
+ */
+function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, location) {
+    loadMap(lat, lng, location, meeting_time);
+    $('.modal-title').text(meeting_type);
+    $('.meeting-time').text(meeting_time);
+    $('.delete-meeting').attr('href', '/delete-meeting/' + id);
+    $('.edit-meeting').attr('href', '/edit-meeting/' + id);
+    $(".track-meeting").attr("id", id);
+    $('.track-friends').attr('id', id);
     $('#meeting-popup').modal('show');
+
+}
+
+$('.track-meeting').click(function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('.track-meeting-walk').attr('href', '/track-meeting/' + id + '?mode=walking');
+    $('.track-meeting-bike').attr('href', '/track-meeting/' + id + '?mode=bicycling');
+    $('.track-meeting-driving').attr('href', '/track-meeting/' + id + '?mode=driving');
+    $('#travelModeChoice').modal('show');
 });
-function loadMap() {
-    var lat = 62.5982406,
-        lng = 29.74364939999998,
-        latlng = new google.maps.LatLng(lat, lng);
-    map = new google.maps.Map(document.getElementById('map-area'), {
+
+$('.track-friends').click(function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('.track-meeting-walk').attr('href', '/track-friends/' + id + '?mode=walking');
+    $('.track-meeting-bike').attr('href', '/track-friends/' + id + '?mode=bicycling');
+    $('.track-meeting-driving').attr('href', '/track-friends/' + id + '?mode=driving');
+    $('#travelModeChoice').modal('show');
+});
+
+/**
+ * @param lat
+ * @param lng
+ * @param meeting_name
+ * @param meeting_time
+ */
+function loadMap(lat, lng, meeting_name, meeting_time) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    map = new google.maps.Map(document.getElementById('map-area-modal'), {
         center: latlng,
-        zoom: 12
+        zoom: 16
     });
+    var infowindow = new google.maps.InfoWindow();
     marker = new google.maps.Marker({
-        draggable: true,
+        draggable: false,
         position: latlng,
         map: map,
-        icon: '/icon.png'
-})
-    ;
-    var input = document.getElementById('search-location');
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    var infowindow = new google.maps.InfoWindow();
-    google.maps.event.addListener(autocomplete, 'place_changed', function (event) {
-        infowindow.close();
-        var place = autocomplete.getPlace();
-        map.setCenter(place.geometry.location);
-        map.setZoom(16);
-        marker.setPosition(place.geometry.location);
-        infowindow.setContent(place.name);
-        // document.getElementById("latitude-val").innerHTML = 'latitude: <b>' + place.geometry.location.lat() + '</b>';
-        // document.getElementById("longitude-val").innerHTML = 'longitude: <b>' + place.geometry.location.lng()+ '</b>';
+        icon: {
+            labelOrigin: new google.maps.Point(30, -10),
+            url: '/meeting-destination.png'
+        }
     });
-    google.maps.event.addListener(marker, 'dragend', function (event) {
-        // document.getElementById("latitude-val").innerHTML = 'latitude: <b>' + event.latLng.lat() + '</b>';
-        // document.getElementById("longitude-val").innerHTML = 'longitude: <b>' + event.latLng.lng() + '</b>';
-        infowindow.close();
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            "latLng": event.latLng
-        }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                var lat = results[0].geometry.location.lat(),
-                    lng = results[0].geometry.location.lng(),
-                    placeName = results[0].address_components[0].long_name,
-                    latlng = new google.maps.LatLng(lat, lng);
-                document.getElementById("search-location").value = results[0].formatted_address;
-            }
-        });
-    });
-};
+    infowindow.setContent('<img id="meeting-image" src="/meeting-picture.png"><br><b>' + meeting_name + '</b>' + '<br><b>' + meeting_time + '</b>');
+    infowindow.open(map, marker);
+}
