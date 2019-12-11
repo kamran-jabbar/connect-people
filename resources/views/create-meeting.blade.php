@@ -1,9 +1,10 @@
 @extends('layouts.app')
 @php
-    $lat = isset($meeting_detail[0]['latitude']) ? $meeting_detail[0]['latitude'] : 62.6010;
-    $lang = isset($meeting_detail[0]['longitude']) ? $meeting_detail[0]['longitude'] : 29.7636;
+    $lat = isset($meeting_detail[0]['latitude']) ? $meeting_detail[0]['latitude'] : 62.60226;
+    $lang = isset($meeting_detail[0]['longitude']) ? $meeting_detail[0]['longitude'] : 29.76359;
+    $icon = isset($meeting_detail[0]['meetingType'][0]['reference']) ?
+                '/meeting-images/'. $meeting_detail[0]['meetingType'][0]['reference'] . '.png' : '/meeting-destination.png';
     $time = isset($meeting_detail[0]['time']) ? (strtotime($meeting_detail[0]['time']) - 7200) * 1000 : '';
-    echo $time;
 @endphp
 @section('content')
     @push('head')
@@ -26,7 +27,10 @@
                 });
             });
         });
-        window.onload = loadMap({!! $lat  !!}, {!! $lang !!});
+
+        window.onload = loadMap({!! $lat  !!}, {!! $lang !!}, '{!! $icon !!}');
+        var latitudeMeeting = {!! $lat !!};
+        var longitudeMeeting = {!! $lang !!};
     </script>
     @endpush
     <div class="container">
@@ -46,10 +50,11 @@
                         @endif
                         {!! Form::open(array('url' => 'create-meeting')) !!}
                         <div class="form-group">
-                            <select name="meeting_type_id" class="form-control">
+                            <select name="meeting_type_id" class="form-control" id="meeting_type">
                                 <option>Meeting Type</option>
                                 @foreach($meeting_types as $meeting_type)
                                     <option value="{{ $meeting_type['id'] }}"
+                                            data="{{$meeting_type['reference']}}"
                                             {{isset($meeting_detail[0]['meeting_type_id']) && $meeting_type['id'] == $meeting_detail[0]['meeting_type_id'] ? "selected" : ""}}>
                                         {{ $meeting_type['meeting_name'] }}
                                     </option>

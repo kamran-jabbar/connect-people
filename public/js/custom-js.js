@@ -5,9 +5,10 @@
  * @param meeting_time
  * @param id
  * @param location
+ * @param image
  */
-function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, location) {
-    loadMap(lat, lng, location, meeting_time);
+function openMeetingDetailPopup(lat, lng, meeting_type, meeting_time, id, location, image) {
+    loadMap(lat, lng, location, meeting_time, image);
     $('.modal-title').text(meeting_type);
     $('.meeting-time').text(meeting_time);
     $('.delete-meeting').attr('href', '/delete-meeting/' + id);
@@ -41,8 +42,9 @@ $('.track-friends').click(function (e) {
  * @param lng
  * @param meeting_name
  * @param meeting_time
+ * @param image
  */
-function loadMap(lat, lng, meeting_name, meeting_time) {
+function loadMap(lat, lng, meeting_name, meeting_time, image) {
     var latlng = new google.maps.LatLng(lat, lng);
     map = new google.maps.Map(document.getElementById('map-area-modal'), {
         center: latlng,
@@ -58,6 +60,6 @@ function loadMap(lat, lng, meeting_name, meeting_time) {
             url: '/meeting-destination.png'
         }
     });
-    infowindow.setContent('<img id="meeting-image" src="/meeting-picture.png"><br><b>' + meeting_name + '</b>' + '<br><b>' + meeting_time + '</b>');
+    infowindow.setContent('<img id="meeting-image" src="/meeting-images/' + image + '.png"><br><b>' + meeting_name + '</b>' + '<br><b>' + meeting_time + '</b>');
     infowindow.open(map, marker);
 }

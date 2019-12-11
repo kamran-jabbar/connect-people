@@ -51,7 +51,8 @@
                                     <tr {!! $style !!} class="meeting-table-row"
                                         onclick="openMeetingDetailPopup('{{ $meeting['latitude'] }}', '{{ $meeting['longitude'] }}'
                                                 , '{{ $meeting->meetingType[0]->meeting_name }}', '{{ $meeting['time'] }}',
-                                                '{{ $meeting['id'] }}', '{{ str_limit($meeting['location'], $limit = 35, $end = '.') }}')">
+                                                '{{ $meeting['id'] }}', '{{ str_limit($meeting['location'], $limit = 35, $end = '.') }}'
+                                                , '{{$meeting['meetingType'][0]['reference']}}')">
                                         <td>{{ $meeting->meetingType[0]->meeting_name }}</td>
                                         <td>{{ str_limit($meeting['location'], $limit = 16, $end = '...') }}</td>
                                     </tr>
@@ -84,7 +85,7 @@
                                         <span class="glyphicon glyphicon-random icon-custom-style"></span>
                                     </a>
                                     <a class="track-friends" href="" title="Track Friend Location">
-                                        <span class="glyphicon glyphicon-user icon-custom-style"></span>
+                                        <i class="fa fa-users icon-custom-style"></i>
                                     </a>
                                     <a class="edit-meeting" href="" title="Edit Meeting">
                                         <span class="glyphicon glyphicon-edit icon-custom-style"></span>

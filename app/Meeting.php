@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Meeting extends Model
 {
-    const DEFAULT_PAGINATION_LIMIT = 7;
+    const DEFAULT_PAGINATION_LIMIT = 4;
 
     public $table = 'meeting';
 

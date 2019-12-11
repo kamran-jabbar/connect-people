@@ -66,8 +66,6 @@ function loadMap(lat, lng, meeting_name) {
         userLatLang.push([otherUserDecodeData[i]['latitude'], otherUserDecodeData[i]['longitude']]);
     }
     var destination = {lat, lng};
-
-    var destinationIcon = '/meeting-destination.png';
     var currentUserIcon = '/current-location.png';
     var otherUserIcon = '/other-user.png';
 

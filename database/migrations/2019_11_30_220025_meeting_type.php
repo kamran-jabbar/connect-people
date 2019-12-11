@@ -16,6 +16,7 @@ class MeetingType extends Migration
         Schema::create('meeting_type', function (Blueprint $table) {
             $table->increments('id');
             $table->string('meeting_name');
+            $table->string('reference');
             $table->timestamps();
         });
     }

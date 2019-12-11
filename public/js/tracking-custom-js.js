@@ -48,7 +48,7 @@ function initialize() {
     var myOptions = {
         zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+    };
     map = new google.maps.Map(document.getElementById("map-area-tracking"), myOptions);
     var trafficLayer = new google.maps.TrafficLayer();
     trafficLayer.setMap(map);
@@ -175,8 +175,7 @@ function calcRoute() {
                     createMarker(startLocation.latlng, startAddress[0] + '<br>' + endAddress[0] + '<br>' + timeAndDistance, "/current-location.png");
                 }
             });
-            createMarker(endLocation.latlng, endLocation.address, "/meeting-destination.png");
-
+            createMarker(endLocation.latlng, endLocation.address, meetingIcon);
             map.setZoom(50);
             startAnimation();
         }
@@ -287,3 +286,12 @@ google.maps.Polyline.prototype.GetIndexAtDistance = function (metres) {
 
 
 
+/**
+ * @param markersArray
+ */
+function deleteMarkers(markersArray) {
+    for (var i = 0; i < markersArray.length; i++) {
+        markersArray[i].setMap(null);
+    }
+    markersArray = [];
+}

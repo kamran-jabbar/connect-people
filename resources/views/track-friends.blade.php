@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @php
-    $lat = isset($meeting_detail[0]['latitude']) ? $meeting_detail[0]['latitude'] : 62.6010;
-    $lang = isset($meeting_detail[0]['longitude']) ? $meeting_detail[0]['longitude'] : 29.7636;
+    $lat = isset($meeting_detail[0]['latitude']) ? $meeting_detail[0]['latitude'] : 62.60226;
+    $lang = isset($meeting_detail[0]['longitude']) ? $meeting_detail[0]['longitude'] : 29.76359;
     $location = isset($meeting_detail[0]['location']) ? $meeting_detail[0]['location'] : '';
+    $icon = isset($meeting_detail[0]['meetingType'][0]['reference']) ?
+                '/meeting-images/'. $meeting_detail[0]['meetingType'][0]['reference'] . '.png' : '/meeting-destination.png';
 @endphp
 @section('content')
     @push('head')
@@ -11,6 +13,7 @@
         var otherUserData = '{!! json_encode($otherUsers) !!}';
         var currentUserData = '{!! json_encode($currentUser) !!}';
         var travelModeCustom = '{!! $mode !!}';
+        var destinationIcon = '{!! $icon !!}';
     </script>
     <script src="{{ asset('js/tracking-friends-custom-js.js') }}"></script>
     <link href="{{ asset('css/custom-css.css') }}" rel="stylesheet">

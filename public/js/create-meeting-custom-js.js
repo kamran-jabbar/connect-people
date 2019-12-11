@@ -3,7 +3,13 @@ $(".meeting-table-row").click(function () {
     $('#meeting-popup').modal('show');
 });
 
-function loadMap(lat, lng) {
+
+$('#meeting_type').change(function () {
+    imageReference = $('option:selected', this).attr('data');
+    loadMap(latitudeMeeting, longitudeMeeting, '/meeting-images/' + imageReference + '.png');
+});
+
+function loadMap(lat, lng, imageReference) {
     document.getElementById("latitude").value = lat;
     document.getElementById("longitude").value = lng;
     latlng = new google.maps.LatLng(lat, lng);
@@ -15,7 +21,7 @@ function loadMap(lat, lng) {
         draggable: true,
         position: latlng,
         map: map,
-        icon: '/meeting-destination.png'
+        icon: imageReference
     });
 
     var input = document.getElementById('search-location');
@@ -47,8 +53,7 @@ function loadMap(lat, lng) {
                 infowindow.setContent('<b>' + results[0].formatted_address + '</b>');
                 document.getElementById("search-location").value = results[0].formatted_address;
                 infowindow.open(map, marker);
-
             }
         });
     });
-};
+}
